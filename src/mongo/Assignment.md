@@ -49,20 +49,86 @@ For this assignment, you will be working with the two collections described belo
 
 ### Step 2: Insert Books into the Library
 Insert six of your favorite books into the library.  Make sure that these are your favorite books, not randomly generated books.
+db.books.insertMany([
+  { title:"The Silent Patient", author:"Alex Michaelides", isbn:"9781250301697",
+    genre:"Fiction", publishedYear:2019, copiesAvailable:3, totalCopies:5 },
+  { title:"Educated", author:"Tara Westover", isbn:"9780399590504",
+    genre:"Non-Fiction", publishedYear:2018, copiesAvailable:0, totalCopies:4 },
+  { title:"Clean Code", author:"Robert C. Martin", isbn:"9780132350884",
+    genre:"Non-Fiction", publishedYear:2008, copiesAvailable:2, totalCopies:2 },
+  { title:"Project Hail Mary", author:"Andy Weir", isbn:"9780593135204",
+    genre:"Fiction", publishedYear:2021, copiesAvailable:1, totalCopies:6 },
+  { title:"Thinking, Fast and Slow", author:"Daniel Kahneman", isbn:"9780374533557",
+    genre:"Non-Fiction", publishedYear:2011, copiesAvailable:0, totalCopies:3 },
+  { title:"The Night Circus", author:"Erin Morgenstern", isbn:"9780307744432",
+    genre:"Fiction", publishedYear:2011, copiesAvailable:4, totalCopies:7 },
+]);
 
 ### Step 3: Insert Patrons into the Library
 Insert five of your friends as patrons into the library. Make sure that these are not randomly generated.
+
+db.patrons.insertMany([
+  { name:"Divya Prathipati", email:"divya@example.edu",
+    membershipDate: ISODate("2004-06-15T00:00:00Z"),
+    booksCheckedOut:[
+      { title:"The Silent Patient", dueDate: ISODate("2025-10-28T00:00:00Z") },
+      { title:"Clean Code",        dueDate: ISODate("2025-11-04T00:00:00Z") }
+    ],
+    fines:0
+  },
+  { name:"Rani Prathipati", email:"rani@example.com",
+    membershipDate: ISODate("2016-03-02T00:00:00Z"),
+    booksCheckedOut:[ { title:"Educated", dueDate: ISODate("2025-10-25T00:00:00Z") } ],
+    fines:7.50
+  },
+  { name:"Rambabu Prathipati", email:"rambabu@example.com",
+    membershipDate: ISODate("2020-09-01T00:00:00Z"),
+    booksCheckedOut:[], fines:0
+  }
+]);
 
 ### Step 4: Queries
 For each of the queries below, write the query and include the results.
 
 1. Write a query to find the titles of all books that have at least one copy available for checkout.
 
+db.books.find(
+...   { copiesAvailable: { $gte: 1 } },
+...   { _id: 0, title: 1 }
+... )
+{ "title" : "The Silent Patient" }
+{ "title" : "Clean Code" }
+{ "title" : "Project Hail Mary" }
+{ "title" : "The Night Circus" }
+>
+
 2. Write a query to find the authors of all books in the "Fiction" genre.
+
+> db.books.distinct("author", { genre: "Fiction" })
+[ "Alex Michaelides", "Andy Weir", "Erin Morgenstern" ]
+>
 
 3. Write a query to find the names of all patrons who owe fines (fines greater than $0).
 
+> db.patrons.find(
+...   { fines: { $gt: 0 } },
+...   { _id: 0, name: 1 }
+... )
+{ "name" : "Rani Prathipati" }
+>
+
 4. Write a query to find the names and membership date of all patrons who became members in the year 2024.
+
+> db.patrons.find(
+...   {
+...     membershipDate: {
+...       $gte: ISODate("2024-01-01T00:00:00Z"),
+...       $lt:  ISODate("2025-01-01T00:00:00Z")
+...     }
+...   },
+...   { _id: 0, name: 1, membershipDate: 1 }
+... )
+>
 
 Hint: Use $gte and $lt operators to specify a date range from January 1, 2024 to January 1, 2025.
 
