@@ -138,14 +138,27 @@ Complete the "Find" homework in Day 2.
 
 1. Find a shortcut for admin commands. Write the shortcut here.
 
+db.adminCommand(<document>)
 
 2. Find the online documentation for queries and cursors. Write the URL here.
+
+https://www.mongodb.com/docs/manual/
+
+https://www.mongodb.com/docs/manual/reference/method/js-cursor/
 
 
 3. Find the MongoDB documentation for mapreduce. Write the URL here.
 
+https://www.mongodb.com/docs/manual/core/map-reduce/
 
 4. Through the JavaScript interface, investigate the code for three collections
     functions: help(), findOne(), and stats(). Past the code for each below.
     For each, write a one-sentence insight that you learned by looking at
     the code.
+
+help(): It is a series of print() which calls attached to the collection prototype, so the output is client-side and it can deviate from server reality.
+
+findOne(): It's a convenience that runs a single-document cursor underneath the hood and returns the first match found.
+
+stats(): The collection-stats command for the current collection is delegated, with any arguments remaining unchanged.
+
